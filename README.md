@@ -1,6 +1,6 @@
 ## Usage
 
 ```rust
-$ cd aoc01
+$ cd day01
 $ cargo run --release < input/input.txt
 ```
