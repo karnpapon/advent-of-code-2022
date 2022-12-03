@@ -45,9 +45,9 @@ fn solve_part2(input: &str) -> Result<()> {
     .step_by(3)
     .enumerate()
     .fold(vec![], |mut acc, line| {
-      let idx = line.0 * 3;
-      let chunks = input.lines().skip(idx).take(3).collect::<Vec<_>>();
-      let c = chunks[0]
+      let offset = line.0 * 3;
+      let chunks = input.lines().skip(offset).take(3).collect::<Vec<_>>();
+      let elf_badge = chunks[0]
         .chars()
         .fold(vec![], |mut chunk_accu, chunk_curr| {
           if chunks[1].contains(chunk_curr)
@@ -60,7 +60,7 @@ fn solve_part2(input: &str) -> Result<()> {
           chunk_accu
         });
 
-      acc.push(c[0]);
+      acc.push(elf_badge[0]);
       acc
     })
     .iter()
