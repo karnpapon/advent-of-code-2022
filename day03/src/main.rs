@@ -40,27 +40,32 @@ fn solve_part1(input: &str) -> Result<()> {
 }
 
 fn solve_part2(input: &str) -> Result<()> {
+  let steps = 3;
+  let first_line = 0;
+  let second_line = 1;
+  let third_line = 2;
   let res: i32 = input
     .lines()
-    .step_by(3)
+    .step_by(steps)
     .enumerate()
     .fold(vec![], |mut acc, line| {
-      let offset = line.0 * 3;
-      let chunks = input.lines().skip(offset).take(3).collect::<Vec<_>>();
-      let elf_badge = chunks[0]
+      let offset = line.0 * steps;
+      let chunks = input
+        .lines()
+        .skip(offset)
+        .take(steps)
+        .collect::<Vec<&str>>();
+      let elf_badge = chunks[first_line]
         .chars()
-        .fold(vec![], |mut chunk_accu, chunk_curr| {
-          if chunks[1].contains(chunk_curr)
-            && (chunks[2].contains(chunk_curr))
-            && !chunk_accu.contains(&chunk_curr)
-          {
-            chunk_accu.push(chunk_curr);
-            return chunk_accu;
+        .fold(None, |mut chunk_accu, chunk_curr| {
+          if chunks[second_line].contains(chunk_curr) && (chunks[third_line].contains(chunk_curr)) {
+            chunk_accu = Some(chunk_curr)
           }
           chunk_accu
-        });
+        })
+        .unwrap();
 
-      acc.push(elf_badge[0]);
+      acc.push(elf_badge);
       acc
     })
     .iter()
