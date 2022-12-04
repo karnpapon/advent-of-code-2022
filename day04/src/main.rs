@@ -13,10 +13,10 @@ fn main() -> Result<()> {
 }
 
 fn solve_part1(input: &str) -> Result<()> {
-  let mut res = 0;
-
-  res = input.lines().fold(0, |mut acc, line| {
-    let group = line
+  let res = input.lines().fold(0, |mut acc, line| {
+    let first = 0;
+    let last = 1;
+    let pairs = line
       .split(',')
       .collect::<Vec<&str>>()
       .iter()
@@ -27,12 +27,12 @@ fn solve_part1(input: &str) -> Result<()> {
           .iter()
           .map(|x| x.parse::<i32>().unwrap())
           .collect::<Vec<i32>>();
-        (group_range_num[0]..=group_range_num[1]).collect::<Vec<i32>>()
+        group_range_num[0]..=group_range_num[1]
       })
       .collect::<Vec<_>>();
 
-    if group[1].iter().all(|x| group[0].contains(x))
-      || group[0].iter().all(|x| group[1].contains(x))
+    if pairs[first].contains(pairs[last].start()) && pairs[first].contains(pairs[last].end())
+      || pairs[last].contains(pairs[first].start()) && pairs[last].contains(pairs[first].end())
     {
       acc += 1
     }
@@ -45,10 +45,10 @@ fn solve_part1(input: &str) -> Result<()> {
 }
 
 fn solve_part2(input: &str) -> Result<()> {
-  let mut res = 0;
-
-  res = input.lines().fold(0, |mut acc, line| {
-    let group = line
+  let res = input.lines().fold(0, |mut acc, line| {
+    let first = 0;
+    let last = 1;
+    let pairs = line
       .split(',')
       .collect::<Vec<&str>>()
       .iter()
@@ -59,12 +59,14 @@ fn solve_part2(input: &str) -> Result<()> {
           .iter()
           .map(|x| x.parse::<i32>().unwrap())
           .collect::<Vec<i32>>();
-        (group_range_num[0]..=group_range_num[1]).collect::<Vec<i32>>()
+        group_range_num[0]..=group_range_num[1]
       })
       .collect::<Vec<_>>();
 
-    if group[1].iter().any(|x| group[0].contains(x))
-      || group[0].iter().any(|x| group[1].contains(x))
+    if pairs[first].contains(pairs[last].start())
+      || pairs[first].contains(pairs[last].end())
+      || pairs[last].contains(pairs[first].start())
+      || pairs[last].contains(pairs[first].end())
     {
       acc += 1
     }
