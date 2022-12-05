@@ -56,8 +56,10 @@ fn solve_part1(input: &str, crates: &mut [Vec<char>]) -> Result<()> {
     let (_, cmd) = parse_command(curr).unwrap();
 
     for _ in 0..cmd.move_amount {
-      let moved_item = crates[cmd.from].pop().unwrap();
-      crates[cmd.to].push(moved_item);
+      crates[cmd.from]
+        .pop()
+        .map(|moved_item| crates[cmd.to].push(moved_item))
+        .unwrap();
     }
   });
 
