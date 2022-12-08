@@ -184,7 +184,7 @@ fn solve_part2(input: &str) -> Result<()> {
 
   // find dir size that, at least when being freed up
   // there will be enough space for updating.
-  let mut s = sizes
+  let s = sizes
     .iter()
     .filter_map(|(_, &size)| {
       if size > space_to_freeup {
@@ -195,9 +195,7 @@ fn solve_part2(input: &str) -> Result<()> {
     })
     .collect::<Vec<i32>>();
 
-  s.sort();
-  let res = s.first().unwrap(); // get the smallest size of dir-size that match space_to_freeup.
-
+  let res = s.iter().min().unwrap(); // get the smallest size of dir-size that match space_to_freeup.
   writeln!(io::stdout(), "{:?}", res)?;
   Ok(())
 }
