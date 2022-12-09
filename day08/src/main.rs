@@ -54,63 +54,42 @@ fn solve_part1(input: &str) -> Result<()> {
           let mut leftward_idx = current_x_idx - 1;
           let mut rightward_idx = current_x_idx + 1;
 
-          let mut find_downward = true;
-          let mut find_leftward = true;
-          let mut find_rightward = true;
-          let mut find_upward = true;
-          let mut up_idx = current_y_idx;
-          let mut left_idx = current_x_idx;
-
           // find downward
-          while downward_idx < grids.len() && find_downward {
+          while downward_idx < grids.len() {
             if digit <= &grids[downward_idx][current_x_idx] {
-              find_downward = false;
               break;
             }
             downward_idx += 1;
           }
 
           // find rightward
-          while rightward_idx < curr.1.len() && find_rightward {
+          while rightward_idx < curr.1.len() {
             if digit <= &curr.1[rightward_idx] {
-              find_rightward = false;
               break;
             }
             rightward_idx += 1;
           }
 
           // find leftward
-          while left_idx > 0 || find_leftward {
+          while leftward_idx + 1 > 0 {
             if digit <= &curr.1[leftward_idx] {
-              find_leftward = false;
-              break;
-            }
-            left_idx -= 1;
-            if leftward_idx == 0 {
-              find_leftward = false;
               break;
             }
             leftward_idx -= 1;
           }
 
           // find upward
-          while up_idx > 0 || find_upward {
+          while upward_idx + 1 > 0 {
             if digit <= &grids[upward_idx][current_x_idx] {
-              find_upward = false;
-              break;
-            }
-            up_idx -= 1;
-            if upward_idx == 0 {
-              find_upward = false;
               break;
             }
             upward_idx -= 1;
           }
 
           if downward_idx == grids.len()
-            || up_idx == 0
+            || upward_idx + 1 == 0
             || rightward_idx == curr.1.len()
-            || left_idx == 0
+            || leftward_idx + 1 == 0
           {
             map
               .entry(format!("[{current_x_idx:},{current_y_idx:}]"))
@@ -173,63 +152,42 @@ fn solve_part2(input: &str) -> Result<()> {
           let mut leftward_idx = current_x_idx - 1;
           let mut rightward_idx = current_x_idx + 1;
 
-          let mut find_downward = true;
-          let mut find_leftward = true;
-          let mut find_rightward = true;
-          let mut find_upward = true;
-          let mut up_idx = current_y_idx;
-          let mut left_idx = current_x_idx;
-
           let mut count_upward = 0;
           let mut count_downward = 0;
           let mut count_leftward = 0;
           let mut count_rightward = 0;
 
           // find downward
-          while downward_idx < grids.len() && find_downward {
+          while downward_idx < grids.len() {
             count_downward += 1;
             if digit <= &grids[downward_idx][current_x_idx] {
-              find_downward = false;
               break;
             }
             downward_idx += 1;
           }
 
           // find rightward
-          while rightward_idx < curr.1.len() && find_rightward {
+          while rightward_idx < curr.1.len() {
             count_rightward += 1;
             if digit <= &curr.1[rightward_idx] {
-              find_rightward = false;
               break;
             }
             rightward_idx += 1;
           }
 
           // find leftward
-          while left_idx > 0 || find_leftward {
+          while leftward_idx + 1 > 0 {
             count_leftward += 1;
             if digit <= &curr.1[leftward_idx] {
-              find_leftward = false;
-              break;
-            }
-            left_idx -= 1;
-            if leftward_idx == 0 {
-              find_leftward = false;
               break;
             }
             leftward_idx -= 1;
           }
 
           // find upward
-          while up_idx > 0 || find_upward {
+          while upward_idx + 1 > 0 {
             count_upward += 1;
             if digit <= &grids[upward_idx][current_x_idx] {
-              find_upward = false;
-              break;
-            }
-            up_idx -= 1;
-            if upward_idx == 0 {
-              find_upward = false;
               break;
             }
             upward_idx -= 1;
