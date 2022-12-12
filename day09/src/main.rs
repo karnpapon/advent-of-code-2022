@@ -218,74 +218,37 @@ fn move_tail(
       rope_state_tail.y += 1;
       rope_state_visited.insert(format!("[{:?},{:?}]", rope_state_tail.x, rope_state_tail.y));
     }
-    (-1, 2) => {
+    (-1, 2) | (-2, 2) | (-2, 1) => {
       rope_state_tail.x -= 1;
       rope_state_tail.y += 1;
       rope_state_visited.insert(format!("[{:?},{:?}]", rope_state_tail.x, rope_state_tail.y));
     }
-    (-2, 2) => {
-      rope_state_tail.x -= 1;
-      rope_state_tail.y += 1;
-      rope_state_visited.insert(format!("[{:?},{:?}]", rope_state_tail.x, rope_state_tail.y));
-    }
-    (-2, 1) => {
-      rope_state_tail.x -= 1;
-      rope_state_tail.y += 1;
-      rope_state_visited.insert(format!("[{:?},{:?}]", rope_state_tail.x, rope_state_tail.y));
-    }
+
     (-2, 0) => {
       rope_state_tail.x -= 1;
       rope_state_visited.insert(format!("[{:?},{:?}]", rope_state_tail.x, rope_state_tail.y));
     }
-    (-2, -1) => {
+    (-2, -1) | (-2, -2) | (-1, -2) => {
       rope_state_tail.x -= 1;
       rope_state_tail.y -= 1;
       rope_state_visited.insert(format!("[{:?},{:?}]", rope_state_tail.x, rope_state_tail.y));
     }
-    (-2, -2) => {
-      rope_state_tail.x -= 1;
-      rope_state_tail.y -= 1;
-      rope_state_visited.insert(format!("[{:?},{:?}]", rope_state_tail.x, rope_state_tail.y));
-    }
-    (-1, -2) => {
-      rope_state_tail.x -= 1;
-      rope_state_tail.y -= 1;
-      rope_state_visited.insert(format!("[{:?},{:?}]", rope_state_tail.x, rope_state_tail.y));
-    }
+
     (0, -2) => {
       rope_state_tail.y -= 1;
       rope_state_visited.insert(format!("[{:?},{:?}]", rope_state_tail.x, rope_state_tail.y));
     }
-    (1, -2) => {
+    (1, -2) | (2, -2) | (2, -1) => {
       rope_state_tail.x += 1;
       rope_state_tail.y -= 1;
       rope_state_visited.insert(format!("[{:?},{:?}]", rope_state_tail.x, rope_state_tail.y));
     }
-    (2, -2) => {
-      rope_state_tail.x += 1;
-      rope_state_tail.y -= 1;
-      rope_state_visited.insert(format!("[{:?},{:?}]", rope_state_tail.x, rope_state_tail.y));
-    }
-    (2, -1) => {
-      rope_state_tail.x += 1;
-      rope_state_tail.y -= 1;
-      rope_state_visited.insert(format!("[{:?},{:?}]", rope_state_tail.x, rope_state_tail.y));
-    }
+
     (2, 0) => {
       rope_state_tail.x += 1;
       rope_state_visited.insert(format!("[{:?},{:?}]", rope_state_tail.x, rope_state_tail.y));
     }
-    (2, 1) => {
-      rope_state_tail.x += 1;
-      rope_state_tail.y += 1;
-      rope_state_visited.insert(format!("[{:?},{:?}]", rope_state_tail.x, rope_state_tail.y));
-    }
-    (2, 2) => {
-      rope_state_tail.x += 1;
-      rope_state_tail.y += 1;
-      rope_state_visited.insert(format!("[{:?},{:?}]", rope_state_tail.x, rope_state_tail.y));
-    }
-    (1, 2) => {
+    (2, 1) | (2, 2) | (1, 2) => {
       rope_state_tail.x += 1;
       rope_state_tail.y += 1;
       rope_state_visited.insert(format!("[{:?},{:?}]", rope_state_tail.x, rope_state_tail.y));
