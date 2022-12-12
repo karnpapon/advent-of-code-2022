@@ -1,0 +1,20 @@
+name: day09
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "day09"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build
+        working-directory: ./day09
+        run: cargo build --release --verbose
+      - name: Run
+        working-directory: ./day09
+        run: time target/release/advent-of-code-2022 < input/input.txt
