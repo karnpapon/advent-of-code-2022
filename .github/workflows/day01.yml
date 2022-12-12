@@ -12,9 +12,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: go to day01 folder
-        working-directory: ./day01
       - name: Build
+        working-directory: ./day01
         run: cargo build --release --verbose
       - name: Run
+        working-directory: ./day01
         run: time target/release/advent-of-code-2022 < input/input.txt
