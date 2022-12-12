@@ -17,4 +17,4 @@ jobs:
         run: cargo build --release --verbose
       - name: Run
         working-directory: ./day09
-        run: time target/release/advent-of-code-2022 < input/input.txt
+        run: time target/release/day09 < input/input.txt
