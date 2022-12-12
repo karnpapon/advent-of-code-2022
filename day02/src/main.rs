@@ -11,6 +11,7 @@ enum HandShape {
   Scissors = 3,
 }
 
+#[derive(Clone, Copy)]
 enum Rules {
   Lost = 0,
   Draw = 3,
