@@ -1,0 +1,20 @@
+name: day12
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "day12"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build
+        working-directory: ./day12
+        run: cargo build --release --verbose
+      - name: Run
+        working-directory: ./day12
+        run: time target/release/day12 < input/input.txt

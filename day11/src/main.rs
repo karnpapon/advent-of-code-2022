@@ -45,14 +45,14 @@ impl Monkey {
     let start_item = self.start_items.pop_front().unwrap();
     let worry_level = match &self.operation {
       Operation::Add((v1, v2)) => match (v1, v2) {
-        (Value::Old, Value::Num(num)) => start_item + num,
+        (Value::Old, Value::Num(num)) | (Value::Num(num), Value::Old) => start_item + num,
         (Value::Old, Value::Old) => start_item + start_item,
-        _ => 0,
+        _ => 0, // actually it should cover all possible cases, but for the sake of AoC i'll leave it anyway.
       },
       Operation::Multiply((v1, v2)) => match (v1, v2) {
-        (Value::Old, Value::Num(num)) => start_item * num,
+        (Value::Old, Value::Num(num)) | (Value::Num(num), Value::Old) => start_item * num,
         (Value::Old, Value::Old) => start_item * start_item,
-        _ => 0,
+        _ => 0, // same as above
       },
     };
 
@@ -145,13 +145,13 @@ fn main() -> Result<()> {
   Ok(())
 }
 
-// What is the level of monkey business after 20 rounds of stuff-slinging simian shenanigans?
+// Q: What is the level of monkey business after 20 rounds of stuff-slinging simian shenanigans?
 fn solve_part1(input: &str) -> Result<()> {
   let (_, mut monkeys) = separated_list1(tag("\n\n"), parse_monkey)(input).unwrap();
   let rounds = 20;
 
-  // factor is needed for keeping large number within desirable range.
-  // otherwise
+  // actually in puzzle part-1, this `factor` is not neccessarily needs.
+  // in the otherwords, part-1 still be able to calculate with or without `factor`.
   let factor = monkeys
     .iter()
     .map(|monkey| monkey.test.divisible_by)
@@ -185,10 +185,10 @@ fn solve_part1(input: &str) -> Result<()> {
   Ok(())
 }
 
-// what is the level of monkey business after 10000 rounds?
+// Q: what is the level of monkey business after 10000 rounds?
 fn solve_part2(input: &str) -> Result<()> {
   let (_, mut monkeys) = separated_list1(tag("\n\n"), parse_monkey)(input).unwrap();
-  let rounds = 9;
+  let rounds = 10_000;
 
   // [FROM THIS LINE in AdvenOfCode2022] (https://adventofcode.com/2022/day/11)
   // >> Unfortunately, that relief was all that was keeping your worry levels from reaching ridiculous levels.
@@ -222,10 +222,6 @@ fn solve_part2(input: &str) -> Result<()> {
   total_inspected_times_list.sort_by(|a, b| b.partial_cmp(a).unwrap());
 
   let res = total_inspected_times_list.iter().take(2).product::<u64>();
-
-  // monkeys
-  //   .iter()
-  //   .for_each(|m| println!("{:?}", m.inspected_counter));
 
   writeln!(io::stdout(), "{:?}", res)?;
 
