@@ -41,33 +41,31 @@ struct Monkey {
 }
 
 impl Monkey {
-  fn pop_front(&mut self) {
-    self.start_items.pop_front().unwrap();
-  }
-  fn inspect(&mut self, disable_worry_level_divider: bool) -> u64 {
+  fn inspect(&mut self, disable_worry_level_divider: bool, factor: u64) -> u64 {
+    let start_item = self.start_items.pop_front().unwrap();
     let worry_level = match &self.operation {
       Operation::Add((v1, v2)) => match (v1, v2) {
-        (Value::Old, Value::Num(num)) => self.start_items[0] + num,
-        (Value::Old, Value::Old) => self.start_items[0] + self.start_items[0],
+        (Value::Old, Value::Num(num)) => start_item + num,
+        (Value::Old, Value::Old) => start_item + start_item,
         _ => 0,
       },
       Operation::Multiply((v1, v2)) => match (v1, v2) {
-        (Value::Old, Value::Num(num)) => self.start_items[0] * num,
-        (Value::Old, Value::Old) => self.start_items[0] * self.start_items[0],
+        (Value::Old, Value::Num(num)) => start_item * num,
+        (Value::Old, Value::Old) => start_item * start_item,
         _ => 0,
       },
     };
-    let res = if !disable_worry_level_divider {
-      worry_level / 3
-    } else {
-      worry_level
-    };
-    res
+
+    match disable_worry_level_divider {
+      true => worry_level % factor,
+      false => (worry_level % factor) / 3,
+    }
   }
+
   fn test(&mut self, level: u64) -> u64 {
     match level % self.test.divisible_by == 0 {
-      true => self.test.next_monkey_true.try_into().unwrap(),
-      false => self.test.next_monkey_false.try_into().unwrap(),
+      true => self.test.next_monkey_true,
+      false => self.test.next_monkey_false,
     }
   }
 }
@@ -152,15 +150,24 @@ fn solve_part1(input: &str) -> Result<()> {
   let (_, mut monkeys) = separated_list1(tag("\n\n"), parse_monkey)(input).unwrap();
   let rounds = 20;
 
+  // factor is needed for keeping large number within desirable range.
+  // otherwise
+  let factor = monkeys
+    .iter()
+    .map(|monkey| monkey.test.divisible_by)
+    .product::<u64>();
+
   (0..(monkeys.len() * rounds)).for_each(|idx| {
     let i = idx % monkeys.len();
     (0..monkeys[i].start_items.len()).for_each(|_| {
       let monkey = &mut monkeys[i];
-      let worry_level = monkey.inspect(false);
+      let worry_level = monkey.inspect(false, factor);
       let next_monkey = monkey.test(worry_level);
-      monkey.pop_front();
       monkey.inspected_counter += 1;
-      monkeys[next_monkey as usize]
+      monkeys
+        .iter_mut()
+        .find(|m| m.id == next_monkey)
+        .unwrap()
         .start_items
         .push_back(worry_level);
     });
@@ -181,18 +188,28 @@ fn solve_part1(input: &str) -> Result<()> {
 // what is the level of monkey business after 10000 rounds?
 fn solve_part2(input: &str) -> Result<()> {
   let (_, mut monkeys) = separated_list1(tag("\n\n"), parse_monkey)(input).unwrap();
-  let rounds = 20;
+  let rounds = 9;
 
-  //   99 // 97 // 8 // 103
+  // [FROM THIS LINE in AdvenOfCode2022] (https://adventofcode.com/2022/day/11)
+  // >> Unfortunately, that relief was all that was keeping your worry levels from reaching ridiculous levels.
+  // You'll need to find another way to keep your worry levels manageable.<<
+  // basically this `factor` will keep `worry level` within sane levels.
+  let factor = monkeys
+    .iter()
+    .map(|monkey| monkey.test.divisible_by)
+    .product::<u64>();
+
   (0..(monkeys.len() * rounds)).for_each(|idx| {
     let i = idx % monkeys.len();
     (0..monkeys[i].start_items.len()).for_each(|_| {
       let monkey = &mut monkeys[i];
-      let worry_level = monkey.inspect(true);
+      let worry_level = monkey.inspect(true, factor);
       let next_monkey = monkey.test(worry_level);
       monkey.inspected_counter += 1;
-      monkey.pop_front();
-      monkeys[next_monkey as usize]
+      monkeys
+        .iter_mut()
+        .find(|m| m.id == next_monkey)
+        .unwrap()
         .start_items
         .push_back(worry_level);
     });
@@ -200,15 +217,15 @@ fn solve_part2(input: &str) -> Result<()> {
 
   let mut total_inspected_times_list = monkeys
     .iter()
-    .map(|m| m.inspected_counter) // `i32` is not enough for this puzzle.
-    .collect::<Vec<u64>>();
+    .map(|m| m.inspected_counter)
+    .collect::<Vec<u64>>(); // `i32` is not enough for this puzzle.
   total_inspected_times_list.sort_by(|a, b| b.partial_cmp(a).unwrap());
 
   let res = total_inspected_times_list.iter().take(2).product::<u64>();
 
-  monkeys
-    .iter()
-    .for_each(|m| println!("{:?}", m.inspected_counter));
+  // monkeys
+  //   .iter()
+  //   .for_each(|m| println!("{:?}", m.inspected_counter));
 
   writeln!(io::stdout(), "{:?}", res)?;
 
